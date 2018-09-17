@@ -29,6 +29,6 @@ void freeall(ETH_HDR * eth_hdr,
 }
 
 u_int16_t byteswap(u_int16_t n) {
-    return ((n >> 8) | (n << 8))
+    return ((n >> 8) | (n << 8));
 }
 

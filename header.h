@@ -46,3 +46,6 @@ typedef struct payload {
 void parse(ETH_HDR * eth_hdr, IP_HDR * ip_hdr, TCP_HDR * tcp_hdr, DATA * data, const u_char * packet);
 
 void freeall(ETH_HDR * eth_hdr, IP_HDR * ip_hdr,  TCP_HDR * tcp_hdr, DATA * data);
+
+u_int16_t byteswap(u_int16_t n);
+

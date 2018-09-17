@@ -87,6 +87,7 @@ int main(int argc, char * argv[]) {
         printf("TCP header info\n");
         tcphdr->SRC_PORT = byteswap(tcphdr->SRC_PORT);
         tcphdr->DEST_PORT = byteswqp(tcphdr->DEST_PORT);
+
         printf("> Source port number : %d\n", tcphdr->SRC_PORT);
         printf("> Destination port number : %d\n", tcphdr->DEST_PORT);
         printf("\n");
@@ -107,3 +108,4 @@ int main(int argc, char * argv[]) {
     pcap_close(handle);
     return 0;
 }
+

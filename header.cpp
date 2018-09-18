@@ -14,7 +14,7 @@ void parse(ETH_HDR * eth_hdr,
     memcpy(ip_hdr, p, sizeof(IP_HDR));
     p += (ip_hdr->HEADER_LENGTH)*4;
     memcpy(tcp_hdr, p, sizeof(TCP_HDR));
-    p += sizeof(TCP_HDR);
+    p += (tcp_hdr->OFFSET)*4;
     memcpy(data, p, sizeof(DATA));
 }
 

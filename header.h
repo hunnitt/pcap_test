@@ -31,8 +31,14 @@ typedef struct TCP_header {
     u_int16_t DEST_PORT;
     u_int32_t SEQUENCE_NUM;
     u_int32_t ACKNOWLEDGE_NUM;
+#if BYTE_ORDER == LITTLE_ENDIAN
+    unsigned int RESERVED:4;
+    unsigned int OFFSET:4;
+#endif
+#if BYTE_ORDER == BIG_ENDIAN
     unsigned int OFFSET:4;
     unsigned int RESERVED:4;
+#endif
     u_int8_t FLAGS;
     u_int16_t WINDOW;
     u_int16_t CHECKSUM;

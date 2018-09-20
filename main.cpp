@@ -14,9 +14,9 @@ int main(int argc, char * argv[]) {
 
     char * dev = argv[1];
     char errbuf[PCAP_ERRBUF_SIZE];
-    //pcap_t * handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+    pcap_t * handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
     // for debugging.
-    pcap_t * handle = pcap_open_offline("/home/donghunkim/Desktop/pcap_test/testfile/tcp-port-80-test.gilgil.pcap", errbuf);
+    // pcap_t * handle = pcap_open_offline("/home/donghunkim/Desktop/pcap_test/testfile/tcp-port-80-test.gilgil.pcap", errbuf);
     
 
     if(handle == NULL) {

@@ -49,6 +49,12 @@ typedef struct payload {
     unsigned char data[32];
 }DATA;
 
+void usage(void);
+
+void dump_MAC(ETH_HDR * eth_hdr, char id);
+
+void dump_IP(IP_HDR * ip_hdr, char id);
+
 void parse(ETH_HDR * eth_hdr, IP_HDR * ip_hdr, TCP_HDR * tcp_hdr, DATA * data, const u_char * packet);
 
 void freeall(ETH_HDR * eth_hdr, IP_HDR * ip_hdr,  TCP_HDR * tcp_hdr, DATA * data);

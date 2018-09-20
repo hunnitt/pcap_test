@@ -2,12 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include "header.h"
 
-void usage(void) {
-    printf("syntax : pcap_test <interface>\n");
-    printf("sample : pcap_test ens33\n");
-}
 
 int main(int argc, char * argv[]) {
     if(argc != 2) {
@@ -17,9 +14,9 @@ int main(int argc, char * argv[]) {
 
     char * dev = argv[1];
     char errbuf[PCAP_ERRBUF_SIZE];
-    pcap_t * handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
+    //pcap_t * handle = pcap_open_live(dev, BUFSIZ, 1, 1000, errbuf);
     // for debugging.
-    // pcap_t * handle = pcap_open_offline("/home/donghunkim/Desktop/tcp-port-80-test.gilgil.pcap", errbuf);
+    pcap_t * handle = pcap_open_offline("/home/donghunkim/Desktop/pcap_test/testfile/tcp-port-80-test.gilgil.pcap", errbuf);
     
 
     if(handle == NULL) {
@@ -51,39 +48,24 @@ int main(int argc, char * argv[]) {
             continue;
         }
 
+        printf("\n===============================================\n\n");
         printf("%u bytes captured\n", header->caplen);
         printf("\n");
 
         // Ethernet info Print
         printf("ETH header info\n");
         printf("> Source MAC : ");
-        for(int i=0; i<6; i++) {
-            printf("%02X", ethhdr->SRC_MAC[i]);
-            if(i!=5) printf(":");
-            else printf("\n");
-        }
+        dump_MAC(ethhdr, 's');
         printf("> Destination MAC : ");
-        for(int i=0; i<6; i++) {
-            printf("%02X", ethhdr->DEST_MAC[i]);
-            if(i!=5) printf(":");
-            else printf("\n");
-        }
+        dump_MAC(ethhdr, 'd');
         printf("\n");
 
         // IP info Print
         printf("IP header info\n");
         printf("> Source IP : ");
-        for(int i=0; i<4; i++) {
-            printf("%d", iphdr->SRC_IP[i]);
-            if(i!=3) printf(".");
-            else printf("\n");
-        }
+        dump_IP(iphdr, 's');
         printf("> Destination IP : ");
-        for(int i=0; i<4; i++) {
-            printf("%d", iphdr->DEST_IP[i]);
-            if(i!=3) printf(".");
-            else printf("\n");
-        }
+        dump_IP(iphdr, 'd');
         printf("\n");
 
         // TCP info Print
@@ -97,8 +79,13 @@ int main(int argc, char * argv[]) {
 
         // payload Print
         printf("Payload\n");
+        int datalen = byteswap(iphdr->TOTAL_LENGTH) 
+                      - (iphdr->HEADER_LENGTH)*4
+                      - (tcphdr -> OFFSET)*4;
+        int printlen = 32 < datalen ? 32 : datalen;
+
         u_char * p = payload->data;
-        for(int i=0; i<32; i++) {
+        for(int i=0; i<printlen; i++) {
             printf("%02X ", *p);
             p++;
             if((i & 0x0F) == 0x0F)
@@ -107,6 +94,7 @@ int main(int argc, char * argv[]) {
         printf("\n");
         freeall(ethhdr, iphdr, tcphdr, payload); 
     }
+    printf("\n===============================================\n\n");
 
     pcap_close(handle);
     return 0;
